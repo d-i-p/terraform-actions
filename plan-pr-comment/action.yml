@@ -1,0 +1,17 @@
+name: "terraform plan PR comment"
+description: "Creates a PR comment with the terraform plan output"
+
+inputs:
+  github-token:
+    description: "The GitHub access token with access rights to create the comment, use secrets.GITHUB_TOKEN"
+    required: true
+  plan-stdout:
+    description: "The stdout of terraform plan"
+    required: true
+  plan-outcome:
+    description: "The outcome of the terraform plan command"
+    required: true
+
+runs:
+  using: node12
+  main: index.js

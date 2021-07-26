@@ -1,0 +1,20 @@
+name: "Get currently deployed task definition"
+description: "Gets the ECS task definition that is currently running on the ECS service"
+
+inputs:
+  name:
+    description: "The name of the ECS task definition"
+    required: true
+
+outputs:
+  image:
+    description: The docker image
+    value: ${{ steps.task-definition.outputs.stdout }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get current task definition image
+      shell: bash
+      run: |
+        aws ecs describe-task-definition --task-definition ${{ inputs.name }} | jq -r '.taskDefinition.containerDefinitions[0].image'
