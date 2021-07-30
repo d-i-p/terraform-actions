@@ -6,7 +6,9 @@ const github = require("@actions/github");
   const terraformCommand = core.getInput("cmd");
   const finalCommand = enrichCommandWithRequiredArguments(terraformCommand);
 
-  const { exitCode, output } = await sh(finalCommand);
+  const { exitCode, output } = await sh(finalCommand, {
+    cwd: core.getInput("working-directory"),
+  });
   console.log(output);
 
   if (exitCode === 2) {
@@ -66,9 +68,10 @@ function importantPartOfPlan(plan) {
     : plan;
 }
 
-async function sh(command) {
+async function sh(command, options) {
   let output = "";
   const exitCode = await exec.exec(command, undefined, {
+    ...options,
     listeners: {
       stdout: (data) => {
         output += data;

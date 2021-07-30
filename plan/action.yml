@@ -4,8 +4,10 @@ description: "Runs terraform plan and creates a PR comment if the plan contains 
 inputs:
   cmd:
     description: "The terraform plan command to run. It will be enriched with arguments that are necessary to make the PR comment work"
+    required: true
+  working-directory:
+    description: "The directory in which to run the cmd in"
     required: false
-    default: ""
   github-token:
     description: "The GitHub access token with access rights to create the comment, use secrets.GITHUB_TOKEN"
     required: true
