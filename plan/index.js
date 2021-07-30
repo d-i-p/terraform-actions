@@ -68,7 +68,7 @@ function importantPartOfPlan(plan) {
 
 async function sh(command) {
   let output = "";
-  const exitCode = await exec.exec(command, {
+  const exitCode = await exec.exec(command, [], {
     listeners: {
       stdout: (data) => {
         output += data;
