@@ -3,7 +3,6 @@ const exec = require("@actions/exec");
 const github = require("@actions/github");
 
 const TERRAFORM_CODE_NO_PLAN_CHANGES = 0;
-const TERRAFORM_CODE_PLAN_FAILED = 1;
 const TERRAFORM_CODE_PLAN_CHANGES = 2;
 
 (async () => {
@@ -15,11 +14,13 @@ const TERRAFORM_CODE_PLAN_CHANGES = 2;
     ignoreReturnCode: true,
   });
 
+  console.log(`Exit code was ${exitCode}, type: ${typeof exitCode}`);
+
   if (exitCode === TERRAFORM_CODE_PLAN_CHANGES) {
     await createComment(output);
   }
 
-  if (exitCode === TERRAFORM_CODE_PLAN_FAILED) {
+  if (exitCode !== TERRAFORM_CODE_NO_PLAN_CHANGES) {
     core.setFailed("terraform plan failed");
   }
 })();
