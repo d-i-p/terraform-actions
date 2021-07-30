@@ -9,7 +9,7 @@ const TERRAFORM_CODE_PLAN_CHANGES = 2;
   const terraformCommand = core.getInput("cmd");
   const finalCommand = enrichCommandWithRequiredArguments(terraformCommand);
 
-  const { exitCode, output } = await sh(finalCommand, {
+  const { exitCode, stdout } = await exec.getExecOutput(finalCommand, {
     cwd: core.getInput("working-directory"),
     ignoreReturnCode: true,
   });
@@ -17,7 +17,7 @@ const TERRAFORM_CODE_PLAN_CHANGES = 2;
   console.log(`Exit code was ${exitCode}, type: ${typeof exitCode}`);
 
   if (exitCode === TERRAFORM_CODE_PLAN_CHANGES) {
-    await createComment(output);
+    await createComment(stdout);
   }
 
   if (exitCode !== TERRAFORM_CODE_NO_PLAN_CHANGES) {
@@ -71,21 +71,4 @@ function importantPartOfPlan(plan) {
   return positionOfImportantPart > 0
     ? plan.substring(positionOfImportantPart)
     : plan;
-}
-
-async function sh(command, options) {
-  let output = "";
-  const exitCode = await exec.exec(command, undefined, {
-    ...options,
-    listeners: {
-      stdout: (data) => {
-        output += data;
-      },
-      stderr: (data) => {
-        output += data;
-      },
-    },
-  });
-
-  return { exitCode, output };
 }
