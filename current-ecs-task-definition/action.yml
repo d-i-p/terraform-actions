@@ -15,6 +15,7 @@ runs:
   using: "composite"
   steps:
     - name: Get current task definition image
+      id: task-definition
       shell: bash
       run: |
         aws ecs describe-task-definition --task-definition ${{ inputs.name }} | jq -r '.taskDefinition.containerDefinitions[0].image'
