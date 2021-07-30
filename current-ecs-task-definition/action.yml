@@ -9,7 +9,7 @@ inputs:
 outputs:
   image:
     description: The docker image
-    value: ${{ steps.task-definition.outputs.stdout }}
+    value: ${{ steps.task-definition.outputs.image }}
 
 runs:
   using: "composite"
@@ -18,4 +18,5 @@ runs:
       id: task-definition
       shell: bash
       run: |
-        aws ecs describe-task-definition --task-definition ${{ inputs.name }} | jq -r '.taskDefinition.containerDefinitions[0].image'
+        IMAGE=$(aws ecs describe-task-definition --task-definition ${{ inputs.name }} | jq -r '.taskDefinition.containerDefinitions[0].image')
+        echo "::set-output name=image::$IMAGE"
