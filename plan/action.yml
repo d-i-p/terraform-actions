@@ -1,0 +1,15 @@
+name: "Run terraform plan"
+description: "Runs terraform plan and creates a PR comment if the plan contains changes"
+
+inputs:
+  args:
+    description: "Any additional argument to pass to terraform plan"
+    required: false
+    default: ""
+  github-token:
+    description: "The GitHub access token with access rights to create the comment, use secrets.GITHUB_TOKEN"
+    required: true
+
+runs:
+  using: node12
+  main: index.js
