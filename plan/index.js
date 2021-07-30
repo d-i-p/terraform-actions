@@ -9,7 +9,7 @@ const TERRAFORM_CODE_PLAN_CHANGES = 2;
   const terraformCommand = core.getInput("cmd");
   const finalCommand = enrichCommandWithRequiredArguments(terraformCommand);
 
-  const { exitCode, stdout } = await exec.getExecOutput(finalCommand, {
+  const { exitCode, stdout } = await exec.getExecOutput(finalCommand, null, {
     cwd: core.getInput("working-directory"),
     ignoreReturnCode: true,
   });
