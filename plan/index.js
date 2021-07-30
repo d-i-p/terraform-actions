@@ -3,9 +3,10 @@ const exec = require("@actions/exec");
 const github = require("@actions/github");
 
 (async () => {
-  const { exitCode, output } = await sh(
-    `terraform plan -no-color -detailed-exitcode ${core.getInput("args")}`
-  );
+  const terraformCommand = core.getInput("cmd");
+  const finalCommand = enrichCommandWithRequiredArguments(terraformCommand);
+
+  const { exitCode, output } = await sh(finalCommand);
   console.log(output);
 
   if (exitCode === 2) {
@@ -16,6 +17,16 @@ const github = require("@actions/github");
     core.setFailed("terraform plan failed");
   }
 })();
+
+function enrichCommandWithRequiredArguments(cmd) {
+  if (!cmd.includes(" -no-color")) {
+    cmd += " -no-color";
+  }
+  if (!cmd.includes(" -detailed-exitcode")) {
+    cmd += " -detailed-exitcode";
+  }
+  return cmd;
+}
 
 async function createComment(plan) {
   const context = github.context;

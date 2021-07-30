@@ -2,8 +2,8 @@ name: "Run terraform plan"
 description: "Runs terraform plan and creates a PR comment if the plan contains changes"
 
 inputs:
-  args:
-    description: "Any additional argument to pass to terraform plan"
+  cmd:
+    description: "The terraform plan command to run. It will be enriched with arguments that are necessary to make the PR comment work"
     required: false
     default: ""
   github-token:
