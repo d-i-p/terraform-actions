@@ -9,7 +9,6 @@ const github = require("@actions/github");
   const { exitCode, output } = await sh(finalCommand, {
     cwd: core.getInput("working-directory"),
   });
-  console.log(output);
 
   if (exitCode === 2) {
     await createComment(output);
