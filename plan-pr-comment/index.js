@@ -6,10 +6,9 @@ const github = require("@actions/github");
   const token = core.getInput("github-token");
   const octokit = github.getOctokit(token);
 
-  const outcome = core.getInput("plan-outcome");
   const plan = core.getInput("plan-stdout");
 
-  const comment = `#### Terraform Plan 📖 ${formatOutcome(outcome)}
+  const comment = `#### Terraform Plan 📖
 <details><summary>${extractSummary(plan)} Show Plan</summary>
 
 \`\`\`terraform
@@ -40,8 +39,4 @@ function importantPartOfPlan(plan) {
   return positionOfImportantPart > 0
     ? plan.substring(positionOfImportantPart)
     : plan;
-}
-
-function formatOutcome(outcome) {
-  return outcome ? "`" + outcome + "`" : "";
 }

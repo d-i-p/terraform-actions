@@ -8,10 +8,6 @@ inputs:
   plan-stdout:
     description: "The stdout of terraform plan"
     required: true
-  plan-outcome:
-    description: "The outcome of the terraform plan command"
-    required: false
-    default: ""
 
 runs:
   using: node12
