@@ -19,17 +19,17 @@ jobs:
 
       - name: Terraform plan
         id: plan
-        run: terraform plan -no-color -var=image=${{ steps.current-task-definition.outputs.image }}
+        run: terraform plan -no-color -detailed-exitcode -var=image=${{ steps.current-task-definition.outputs.image }}
         continue-on-error: true
 
       - name: Add PR comment
+        if: steps.plan.outputs.exitcode == 2
         uses: d-i-p/terraform-actions/plan-pr-comment@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           plan-stdout: ${{ steps.plan.outputs.stdout }}
-          plan-outcome: ${{ steps.plan.outcome }}
 
       - name: Terraform error exit
-        if: ${{ steps.plan.outcome == 'failure' }}
+        if: steps.plan.outputs.exitcode == 1
         run: exit 1
 ```

@@ -10,7 +10,8 @@ inputs:
     required: true
   plan-outcome:
     description: "The outcome of the terraform plan command"
-    required: true
+    required: false
+    default: ""
 
 runs:
   using: node12
