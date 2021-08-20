@@ -32,9 +32,17 @@ function extractSummary(plan) {
 }
 
 function importantPartOfPlan(plan) {
-  const positionOfImportantPart = plan.indexOf(
+  // terraform 0.x output
+  let positionOfImportantPart = plan.indexOf(
     "An execution plan has been generated and is shown below."
   );
+
+  // terraform 1.x output
+  if (positionOfImportantPart === -1) {
+    positionOfImportantPart = plan.indexOf(
+      'Terraform used the selected providers to generate the following execution'
+    );
+  }
 
   return positionOfImportantPart > 0
     ? plan.substring(positionOfImportantPart)
