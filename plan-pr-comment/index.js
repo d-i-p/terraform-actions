@@ -27,7 +27,7 @@ ${importantPartOfPlan(plan)}
 })();
 
 function extractSummary(plan) {
-  const summaryMatches = plan.match(/.*\d to add, \d to change, \d to destroy/);
+  const summaryMatches = plan.match(/.*\d+ to add, \d+ to change, \d+ to destroy/);
   return summaryMatches ? `${summaryMatches[0]} -` : "Changes identified!";
 }
 
