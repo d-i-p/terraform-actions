@@ -7,8 +7,10 @@ const github = require("@actions/github");
   const octokit = github.getOctokit(token);
 
   const plan = core.getInput("plan-stdout");
+  const environment = core.getInput("environment");
+  const environmentString = environment ? ` (${environment})` : "";
 
-  const comment = `#### Terraform Plan 📖
+  const comment = `#### Terraform Plan${environmentString} 📖
 <details><summary>${extractSummary(plan)} Show Plan</summary>
 
 \`\`\`terraform
@@ -40,7 +42,7 @@ function importantPartOfPlan(plan) {
   // terraform 1.x output
   if (positionOfImportantPart === -1) {
     positionOfImportantPart = plan.indexOf(
-      'Terraform used the selected providers to generate the following execution'
+      "Terraform used the selected providers to generate the following execution"
     );
   }
 

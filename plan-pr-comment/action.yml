@@ -8,6 +8,9 @@ inputs:
   plan-stdout:
     description: "The stdout of terraform plan"
     required: true
+  environment:
+    description: "The name of the environment to add to the description"
+    required: false
 
 runs:
   using: node12
