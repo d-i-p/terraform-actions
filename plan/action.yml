@@ -26,7 +26,7 @@ runs:
       shell: bash
       # workaround for continue-on-failure: true not available in composite actions
       run: |
-        ${{ inputs.cmd }} -detailed-exitcode -no-color && echo "::set-output name=exitcode::0" || echo "::set-output name=exitcode::$?" >&2 /tmp/plan-output
+        ${{ inputs.cmd }} -detailed-exitcode -no-color && echo "::set-output name=exitcode::0" || echo "::set-output name=exitcode::$?" 2>&1 /tmp/plan-output
         echo "::set-output name=stdout::$(cat /tmp/plan-output)"
       working-directory: ${{ inputs.working-directory }}
 
