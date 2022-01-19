@@ -1,9 +1,9 @@
 name: "Run terraform plan and create PR comment"
-description: "Runs terraform plan and adds a comment to the PR if it contains changes. Make sure to set terraform_wrapper: false on hashicorp/setup-terraform"
+description: "Runs terraform plan and adds a comment to the PR if it contains changes"
 
 inputs:
   cmd:
-    description: "The terraform plan command. '-detailed-exitcode' will be added by this action"
+    description: "The terraform plan command. '-detailed-exitcode' and '-no-color' will be added by this action"
     required: false
     default: terraform plan
   label:
