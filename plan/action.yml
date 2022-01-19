@@ -3,7 +3,7 @@ description: "Runs terraform plan and adds a comment to the PR if it contains ch
 
 inputs:
   cmd:
-    description: "The terraform plan command. '-no-color' and '-detailed-exitcode' will be added by this action"
+    description: "The terraform plan command. '-detailed-exitcode' will be added by this action"
     required: false
     default: terraform plan
   environment:
@@ -26,13 +26,13 @@ runs:
       shell: bash
       # workaround for continue-on-failure: true not available in composite actions
       run: |
-        PLAN_STDOUT=$( ${{ inputs.cmd }} -no-color -detailed-exitcode && echo "::set-output name=exitcode::0" || echo "::set-output name=exitcode::$?")
+        PLAN_STDOUT=$( ${{ inputs.cmd }} -detailed-exitcode && echo "::set-output name=exitcode::0" || echo "::set-output name=exitcode::$?")
         echo "::set-output name=stdout::$PLAN_STDOUT"
       working-directory: ${{ inputs.working-directory }}
 
     - name: Add PR comment if plan has changes
       if: steps.plan.outputs.exitcode == '2'
-      uses: ../plan-pr-comment
+      uses: d-i-p/terraform-actions/plan@main
       with:
         github-token: ${{ inputs.github-token }}
         plan-stdout: ${{ steps.plan.outputs.stdout }}
