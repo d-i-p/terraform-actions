@@ -23,10 +23,10 @@ runs:
   steps:
     - name: Run terraform plan
       id: plan
-      shell: bash
-      # workaround for continue-on-failure: true not available in composite actions
+      shell: sh # if you use bash, it fails fast
       run: |
-        TF_OUTPUT=$( ${{ inputs.cmd }} -detailed-exitcode -no-color && echo "::set-output name=exitcode::0" || echo "::set-output name=exitcode::$?" )
+        TF_OUTPUT=$( ${{ inputs.cmd }} -detailed-exitcode -no-color )
+        echo "::set-output name=exitcode::$?"
         echo $TF_OUTPUT >> $GITHUB_ENV
       working-directory: ${{ inputs.working-directory }}
 
