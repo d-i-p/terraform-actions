@@ -16,7 +16,6 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: x.x.x
-          terraform_wrapper: false  # <-- important to set this to false
 
       - uses: d-i-p/terraform-actions/current-ecs-task-definition@main
         id: current-task-definition
@@ -30,3 +29,5 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           working-directory: infrastructure
 ```
+
+It is important to use setup-terraform with terraform_wrapper: true
