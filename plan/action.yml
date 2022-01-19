@@ -24,13 +24,22 @@ runs:
     - name: Run terraform plan
       id: plan
       shell: bash
-      run: ${{ inputs.cmd }} -no-color -detailed-exitcode
+      # workaround for continue-on-failure: true not available in composite actions
+      run: ${{ inputs.cmd }} -no-color -detailed-exitcode && echo "::set-output name=actual-exit-code::0" || echo "::set-output name=actual-exit-code::$?"
       working-directory: ${{ inputs.working-directory }}
 
+    - name: debug
+      run: echo "actual-exit-code is ${{ steps.plan.outputs.actual-exit-code }}"
+
     - name: Add PR comment if plan has changes
-      if: failure() && steps.plan.outputs.exitcode == 2
+      if: steps.plan.outputs.actual-exit-code == '2'
       uses: ./plan-pr-comment
       with:
         github-token: ${{ inputs.github-token }}
         plan-stdout: ${{ steps.plan.outputs.stdout }}
         environment: ${{ inputs.environment }}
+
+    - name: Exit if terraform plan failed
+      if: steps.plan.outputs.actual-exit-code == '1'
+      shell: bash
+      run: exit 1
