@@ -7,6 +7,8 @@ Several github actions to simplify working with terraform in github action workf
 ## Example
 
 Run terraform plan in a pull request and add the plan output as a comment to the PR.
+This example also includes how to use the `current-ecs-task-definition` action,
+but both can also be used separately.
 
 ```
 jobs:
@@ -30,4 +32,4 @@ jobs:
           working-directory: infrastructure
 ```
 
-It is important to use setup-terraform with terraform_wrapper: true
+It is important to use the hashicorp/setup-terraform action with `terraform_wrapper: true` (the default).
