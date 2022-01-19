@@ -25,15 +25,11 @@ runs:
       id: plan
       shell: bash
       # workaround for continue-on-failure: true not available in composite actions
-      run: ${{ inputs.cmd }} -no-color -detailed-exitcode || echo $?
+      run: echo ""::set-output name=stdout::$( ${{ inputs.cmd }} -no-color -detailed-exitcode )" && echo "::set-output name=exitcode::0" || echo "::set-output name=exitcode::$?"
       working-directory: ${{ inputs.working-directory }}
 
-    - name: debug
-      shell: bash
-      run: echo "plan code is $PLAN_CODE"
-
     - name: Add PR comment if plan has changes
-      if: steps.plan.outputs.actual-exit-code == '2'
+      if: steps.plan.outputs.exitcode == '2'
       uses: ./plan-pr-comment
       with:
         github-token: ${{ inputs.github-token }}
@@ -41,6 +37,6 @@ runs:
         environment: ${{ inputs.environment }}
 
     - name: Exit if terraform plan failed
-      if: steps.plan.outputs.actual-exit-code == '1'
+      if: steps.plan.outputs.exitcode == '1'
       shell: bash
       run: exit 1
