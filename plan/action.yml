@@ -2,9 +2,10 @@ name: "Run terraform plan and create PR comment"
 description: "Runs terraform plan and adds a comment to the PR if it contains changes"
 
 inputs:
-  terraform-plan-cmd:
+  cmd:
     description: "The terraform plan command. '-no-color' and '-detailed-exitcode' will be added by this action"
-    required: true
+    required: false
+    default: terraform plan
   environment:
     description: "The name of the environment to add to the description"
     required: false
@@ -20,7 +21,7 @@ runs:
       id: plan
       shell: bash
       # workaround for continue-on-failure: true not available in composite actions
-      run: ${{ inputs.terraform-plan-cmd }} -no-color -detailed-exitcode && echo "::set-output name=actual-exit-code::0" || echo "::set-output name=actual-exit-code::$?"
+      run: ${{ inputs.cmd }} -no-color -detailed-exitcode && echo "::set-output name=actual-exit-code::0" || echo "::set-output name=actual-exit-code::$?"
 
     - name: Add PR comment if plan has changes
       if: steps.plan.outputs.actual-exit-code == 2
