@@ -24,6 +24,9 @@ runs:
     - name: Run terraform plan
       id: plan
       shell: bash
+      # even though we use "|| true", the steps.plan.outputs.exitcode will be the correct
+      # exit code of the terraform command, because of the terraform wrapper provided by 
+      # hashicorp/setup-terraform
       run: ${{ inputs.cmd }} -detailed-exitcode -no-color || true
       working-directory: ${{ inputs.working-directory }}
 
