@@ -17,19 +17,10 @@ jobs:
         with:
           name: ${{ env.PROJECT_NAME }}
 
-      - name: Terraform plan
-        id: plan
-        run: terraform plan -no-color -detailed-exitcode -var=image=${{ steps.current-task-definition.outputs.image }}
-        continue-on-error: true
-
-      - name: Add PR comment if plan has changes
-        if: steps.plan.outputs.exitcode == 2
-        uses: d-i-p/terraform-actions/plan-pr-comment@main
+      - name: Run terraform plan
+        uses: d-i-p/terraform-actions/plan@main
         with:
+          cmd: terraform plan -var=image=${{ steps.current-task-definition.outputs.image }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          plan-stdout: ${{ steps.plan.outputs.stdout }}
-
-      - name: Exit if terraform plan failed
-        if: steps.plan.outputs.exitcode == 1
-        run: exit 1
+          working-directory: infrastructure
 ```
