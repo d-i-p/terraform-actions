@@ -32,7 +32,7 @@ runs:
 
     - name: Add PR comment if plan has changes
       if: steps.plan.outputs.exitcode == '2'
-      uses: ./plan-pr-comment
+      uses: ../plan-pr-comment
       with:
         github-token: ${{ inputs.github-token }}
         plan-stdout: ${{ steps.plan.outputs.stdout }}
