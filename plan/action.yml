@@ -25,12 +25,12 @@ runs:
       id: plan
       shell: bash
       # workaround for continue-on-failure: true not available in composite actions
-      run: ${{ inputs.cmd }} -no-color -detailed-exitcode || echo "::set-output name=actual-exit-code::$?"
+      run: ${{ inputs.cmd }} -no-color -detailed-exitcode || PLAN_CODE=$?
       working-directory: ${{ inputs.working-directory }}
 
     - name: debug
       shell: bash
-      run: echo "actual-exit-code is ${{ steps.plan.outputs.actual-exit-code }}"
+      run: echo "plan code is $PLAN_CODE"
 
     - name: Add PR comment if plan has changes
       if: steps.plan.outputs.actual-exit-code == '2'
