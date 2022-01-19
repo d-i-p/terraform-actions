@@ -9,6 +9,10 @@ inputs:
   environment:
     description: "The name of the environment to add to the description"
     required: false
+  working-directory:
+    description: "The directory to run the terraform plan command in"
+    required: false
+    default: .
   github-token:
     description: "The GitHub token to use for authentication for creating the PR comment"
     required: true
@@ -22,6 +26,7 @@ runs:
       shell: bash
       # workaround for continue-on-failure: true not available in composite actions
       run: ${{ inputs.cmd }} -no-color -detailed-exitcode && echo "::set-output name=actual-exit-code::0" || echo "::set-output name=actual-exit-code::$?"
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Add PR comment if plan has changes
       if: steps.plan.outputs.actual-exit-code == 2
