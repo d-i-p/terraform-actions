@@ -23,15 +23,8 @@ runs:
   steps:
     - name: Run terraform plan
       id: plan
-      shell: bash -o pipefail {0} # disable fail fast, we will react on the exit code manually in the steps afterwards
-      # https://trstringer.com/github-actions-multiline-strings/
-      run: |
-        ${{ inputs.cmd }} -detailed-exitcode -no-color 2>&1 | tee /tmp/terraform-plan.log
-        echo "::set-output name=exitcode::$?"
-
-        echo "TF_OUTPUT<<TF_OUTPUT_EOF" >> $GITHUB_ENV
-        cat /tmp/terraform-plan.log >> $GITHUB_ENV
-        echo "TF_OUTPUT_EOF" >> $GITHUB_ENV
+      shell: bash
+      run: ${{ inputs.cmd }} -detailed-exitcode -no-color || true
       working-directory: ${{ inputs.working-directory }}
 
     - name: Add PR comment if plan has changes
@@ -39,7 +32,7 @@ runs:
       uses: d-i-p/terraform-actions/plan-pr-comment@main
       with:
         github-token: ${{ inputs.github-token }}
-        plan-stdout: ${{ env.TF_OUTPUT }}
+        plan-stdout: ${{ steps.plan.outputs.stdout }}
         label: ${{ inputs.label }}
 
     - name: Exit if terraform plan failed
