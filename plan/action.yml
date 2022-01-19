@@ -29,6 +29,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: debug
+      shell: bash
       run: echo "actual-exit-code is ${{ steps.plan.outputs.actual-exit-code }}"
 
     - name: Add PR comment if plan has changes
