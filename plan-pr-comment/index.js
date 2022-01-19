@@ -7,10 +7,10 @@ const github = require("@actions/github");
   const octokit = github.getOctokit(token);
 
   const plan = core.getInput("plan-stdout");
-  const environment = core.getInput("environment");
-  const environmentString = environment ? ` (${environment})` : "";
+  const label = core.getInput("label");
+  const labelString = label ? ` (${label})` : "";
 
-  const comment = `#### Terraform Plan${environmentString} 📖
+  const comment = `#### Terraform Plan${labelString} 📖
 <details><summary>${extractSummary(plan)} Show Plan</summary>
 
 \`\`\`terraform
@@ -29,7 +29,9 @@ ${importantPartOfPlan(plan)}
 })();
 
 function extractSummary(plan) {
-  const summaryMatches = plan.match(/.*\d+ to add, \d+ to change, \d+ to destroy/);
+  const summaryMatches = plan.match(
+    /.*\d+ to add, \d+ to change, \d+ to destroy/
+  );
   return summaryMatches ? `${summaryMatches[0]} -` : "Changes identified!";
 }
 
