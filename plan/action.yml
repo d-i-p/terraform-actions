@@ -23,7 +23,7 @@ runs:
   steps:
     - name: Run terraform plan
       id: plan
-      shell: sh # if you use bash, it fails fast
+      shell: bash {0} # disable fail fast
       run: |
         TF_OUTPUT=$( ${{ inputs.cmd }} -detailed-exitcode -no-color )
         echo "::set-output name=exitcode::$?"
