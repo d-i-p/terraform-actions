@@ -25,9 +25,12 @@ runs:
       id: plan
       shell: bash {0} # disable fail fast
       run: |
-        TF_OUTPUT=$( ${{ inputs.cmd }} -detailed-exitcode -no-color )
+        ${{ inputs.cmd }} -detailed-exitcode -no-color 2>&1 | tee /tmp/terraform-plan.log
         echo "::set-output name=exitcode::$?"
-        echo $TF_OUTPUT >> $GITHUB_ENV
+
+        echo "TF_OUTPUT<<TF_OUTPUT_EOF" >> $GITHUB_ENV
+        cat /tmp/terraform-plan.log >> $GITHUB_ENV
+        echo "TF_OUTPUT_EOF" >> $GITHUB_ENV
       working-directory: ${{ inputs.working-directory }}
 
     - name: Add PR comment if plan has changes
