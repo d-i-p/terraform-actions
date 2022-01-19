@@ -6,8 +6,8 @@ inputs:
     description: "The terraform plan command. '-detailed-exitcode' will be added by this action"
     required: false
     default: terraform plan
-  environment:
-    description: "The name of the environment to add to the description"
+  label:
+    description: "A string that is added to the PR comment to distinguish it from other comments of this action"
     required: false
   working-directory:
     description: "The directory to run the terraform plan command in"
